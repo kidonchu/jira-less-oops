@@ -4,6 +4,13 @@
 
     // Sets restriction of comment
     function setRestriction(el) {
+
+      // Check if restriction default has already been handled. If yes, then
+      // user wants to use different restriction from default restriction.
+      if (el.data('jlo-handled') === 1) {
+        return;
+      }
+
       chrome.storage.sync.get({
         'jlo_default_restriction': 'Service Desk Team'
       }, function(items) {
@@ -13,7 +20,8 @@
           el.find('#commentLevel').val(defaultRestriction);
           el.find('.current-level').html('Restricted to <span class="redText">' + items.jlo_default_restriction + '</span>');
           el.find('span.icon-unlocked').removeClass('icon-unlocked').addClass('icon-locked');
-        }
+          el.data('jlo-handled', 1);
+         }
       });
     }
 

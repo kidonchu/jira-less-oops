@@ -1,7 +1,7 @@
 module.exports = function(grunt) {
 
   var pkg = grunt.file.readJSON('package.json');
-  // var mnf = grunt.file.readJSON('code/manifest.json');
+  var mnf = grunt.file.readJSON('code/manifest.json');
 
   var fileMaps = { browserify: {}, uglify: {} };
   var file, files = grunt.file.expand({cwd:'code/js'}, ['*.js']);
@@ -17,7 +17,7 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
 
-    clean: ['build/unpacked-dev', 'build/unpacked-prod', 'build/*.crx'],
+    clean: ['build/unpacked-dev', 'build/unpacked-prod', 'build/*.crx', 'build/*.zip'],
 
     mkdir: {
       unpacked: { options: { create: ['build/unpacked-dev', 'build/unpacked-prod'] } },
@@ -72,6 +72,12 @@ module.exports = function(grunt) {
           './crxmake.sh build/unpacked-prod ./mykey.pem',
           'mv -v ./unpacked-prod.crx build/' + pkg.name + '-' + pkg.version + '.crx'
         ].join(' && ')
+      },
+      zip: {
+        cmd: [
+          'cd build/unpacked-prod',
+          'zip -r ../jlo.zip css html js images manifest.json'
+        ].join(' && ')
       }
     },
 
@@ -103,18 +109,18 @@ module.exports = function(grunt) {
   // custom tasks
   //
 
-  // grunt.registerTask(
-  //   'manifest', 'Extend manifest.json with extra fields from package.json',
-  //   function() {
-  //     var fields = ['name', 'version', 'description'];
-  //     for (var i = 0; i < fields.length; i++) {
-  //       var field = fields[i];
-  //       mnf[field] = pkg[field];
-  //     }
-  //     grunt.file.write('build/unpacked-dev/manifest.json', JSON.stringify(mnf, null, 4) + '\n');
-  //     grunt.log.ok('manifest.json generated');
-  //   }
-  // );
+  grunt.registerTask(
+    'manifest', 'Extend manifest.json with extra fields from package.json',
+    function() {
+      var fields = ['version'];
+      for (var i = 0; i < fields.length; i++) {
+        var field = fields[i];
+        mnf[field] = pkg[field];
+      }
+      grunt.file.write('build/unpacked-dev/manifest.json', JSON.stringify(mnf, null, 4) + '\n');
+      grunt.log.ok('manifest.json generated');
+    }
+  );
 
   grunt.registerTask(
     'circleci', 'Store built extension as CircleCI arfitact',
@@ -135,7 +141,7 @@ module.exports = function(grunt) {
   // DEFAULT
   //
 
-  grunt.registerTask('default', ['clean', 'test', 'mkdir:unpacked', 'copy:main',
+  grunt.registerTask('default', ['clean', 'test', 'mkdir:unpacked', 'copy:main', 'manifest',
     'mkdir:js', 'browserify', 'copy:prod', 'uglify', 'exec', 'circleci']);
 
 };
