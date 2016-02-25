@@ -29,13 +29,13 @@
 
       $(document.body).on('focus', '#issue-comment-add #comment', function(){
         setRestriction($('form#issue-comment-add'));
-      }).on('focus', 'form#assign-issue #comment', function(){
+      }).on('focus', 'form#assign-issue #assignee-field', function(){
         setRestriction($('form#assign-issue'));
       }).on('focus', 'form#comment-add #comment', function(){
         setRestriction($('form#comment-add'));
       }).on('focus', 'form#log-work #log-work-time-logged', function(){
         setRestriction($('form#log-work'));
-      }).on('focus', 'div#edit-issue-dialog #comment', function(){
+      }).on('focus', 'div#edit-issue-dialog #issuetype-field', function(){
         setRestriction($('div#edit-issue-dialog'));
       });
     });
