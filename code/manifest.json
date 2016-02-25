@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+  "name": "JIRA Less Oops",
+  "description": "Automatically set JIRA's 'Restricted To' to option-defined default role",
+  "version": "0.1.1",
+  "icons": { "128": "images/icon.png" },
+  "content_scripts": [{
+    "matches": [ "https://jira.gorillagroup.com"],
+    "js": [ "js/content.js" ]
+  }],
+  "options_page": "html/options.html",
+  "permissions": ["<all_urls>", "storage"],
+  "web_accessible_resources": [ "js/*", "html/*", "css/*", "images/*" ],
+  "content_security_policy": "script-src 'self'; object-src 'self'",
+  "author": "Kidon Chu (kidonchu@gmail.com)"
+}
