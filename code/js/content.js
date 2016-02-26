@@ -25,18 +25,24 @@
       });
     }
 
+    var elMapping = [
+      {'elParent': 'form#issue-comment-add', 'elToFocus': ['#comment']},
+      {'elParent': 'form#assign-issue', 'elToFocus': ['#assignee-field','#comment']},
+      {'elParent': 'form#log-work', 'elToFocus': ['#log-work-time-logged','#comment']},
+      {'elParent': 'div#edit-issue-dialog', 'elToFocus': ['#issuetype-field','#comment']},
+      {'elParent': 'form#issue-workflow-transition', 'elToFocus': ['#assignee-field','#comment']},
+    ];
+
     $('document').ready(function(){
 
-      $(document.body).on('focus', '#issue-comment-add #comment', function(){
-        setRestriction($('form#issue-comment-add'));
-      }).on('focus', 'form#assign-issue #assignee-field', function(){
-        setRestriction($('form#assign-issue'));
-      }).on('focus', 'form#comment-add #comment', function(){
-        setRestriction($('form#comment-add'));
-      }).on('focus', 'form#log-work #log-work-time-logged', function(){
-        setRestriction($('form#log-work'));
-      }).on('focus', 'div#edit-issue-dialog #issuetype-field', function(){
-        setRestriction($('div#edit-issue-dialog'));
+      $.each(elMapping, function(i, item){
+        var toFocus = [];
+        $.each(item.elToFocus, function(j, subselection){
+          toFocus.push(item.elParent + ' ' + subselection);
+        });
+        $(document.body).on('focus', toFocus.join(','), function(){
+          setRestriction($(item.elParent));
+        });
       });
     });
 })();

@@ -76,7 +76,7 @@ module.exports = function(grunt) {
       zip: {
         cmd: [
           'cd build/unpacked-prod',
-          'zip -r ../jlo.zip css html js images manifest.json'
+          'zip -r ../' + pkg.name + '-' + pkg.version + '.zip css html js images manifest.json'
         ].join(' && ')
       }
     },
